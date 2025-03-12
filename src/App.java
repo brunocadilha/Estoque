@@ -5,7 +5,7 @@ public class App {
         Scanner input = new Scanner(System.in);
 
         int opcao = -1;
-        Produto[] produtos = new Produto[0];
+        Estoque estoque = new Estoque("Várzea");
 
         while (opcao != 0) {
             System.out.println("****MENU****");
@@ -26,62 +26,39 @@ public class App {
         
                 System.out.println("Informe a quantidade do produto:");
                 int quantidade = input.nextInt();
-        
-                Produto produto = new Produto(nome, preco, quantidade);
-        
-                System.out.println("Produto cadastrado!");
-                produto.ExibirProduto();
 
-                // construir um novo array
-                Produto[] produtosNovo = new Produto[produtos.length + 1];
-
-                // preencher com as informações antigas
-                for (int i = 0; i < produtos.length; i++) {
-                    produtosNovo[i] = produtos[i];
-                }
-
-                // sobrescrever o array
-                produtos = produtosNovo;
-
-                // adiciono o produto na última posição
-                produtos[produtosNovo.length - 1] = produto;
+                estoque.adicionarProduto(nome, preco, quantidade);
 
             } else if (opcao == 2) {
                 System.out.println("Informe o nome do produto:");
                 String nome = input.nextLine();
 
-                for (int i = 0; i < produtos.length; i++) {
-                    if (produtos[i] != null && produtos[i].getNome().equals(nome)) {
-                        System.out.println("Informe a quantidade a ser adicionada:");
-                        int quantidadeAdicionada = input.nextInt();
+                Produto produto = estoque.localizaProduto(nome);
 
-                        produtos[i].adicionarEstoque(quantidadeAdicionada);
+                if (produto != null) {
+                    System.out.println("Informe a quantidade a ser adicionada:");
+                    int quantidadeAdicionada = input.nextInt();
 
-                        produtos[i].ExibirProduto();
-                    }
+                    estoque.adicionarQuantidade(produto, quantidadeAdicionada);
+                } else {
+                    System.out.println("Produto não localizado!");
                 }
             } else if (opcao == 3) {
                 System.out.println("Informe o nome do produto:");
                 String nome = input.nextLine();
 
-                for (int i = 0; i < produtos.length; i++) {
-                    if (produtos[i] != null && produtos[i].getNome().equals(nome)) {
-                        System.out.println("Informe a quantidade a ser removida:");
-                        int quantidadeRemovida = input.nextInt();
-                
-                        produtos[i].removerEstoque(quantidadeRemovida);
+                Produto produto = estoque.localizaProduto(nome);
 
-                        produtos[i].ExibirProduto();
-                    }
+                if (produto != null) {
+                    System.out.println("Informe a quantidade a ser removida:");
+                    int quantidadeRemovida = input.nextInt();
+
+                    estoque.removerQuantidade(produto, quantidadeRemovida);
+                } else {
+                    System.out.println("Produto não localizado!");
                 }
             } else if (opcao == 4) {
-                for (int i = 0; i < produtos.length; i++) {
-                    if (produtos[i] != null) {
-                        System.out.println("Produto: " + i);
-                        produtos[i].ExibirProduto();
-                        System.out.println();
-                    }
-                }
+                estoque.exibirProdutos();
             }
         }
 
